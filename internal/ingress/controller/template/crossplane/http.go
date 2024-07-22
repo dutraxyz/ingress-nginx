@@ -233,6 +233,15 @@ func (c *Template) buildHTTP() {
 		httpBlock = append(httpBlock, buildDirective("proxy_pass_header", "Server"))
 	}
 
+	if cfg.EnableBrotli {
+		httpBlock = append(httpBlock,
+			buildDirective("brotli", "on"),
+			buildDirective("brotli_comp_level", cfg.BrotliLevel),
+			buildDirective("brotli_min_length", cfg.BrotliMinLength),
+			buildDirective("brotli_types", cfg.BrotliTypes),
+		)
+	}
+
 	c.config.Parsed = append(c.config.Parsed, &ngx_crossplane.Directive{
 		Directive: "http",
 		Block:     httpBlock,
